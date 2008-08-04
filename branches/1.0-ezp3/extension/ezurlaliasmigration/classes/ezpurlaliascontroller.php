@@ -19,9 +19,10 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
      * Action migrating a selected set of custom url aliases to the migration table.
      *
      * @param array $elementList 
+     * @static
      * @return void
      */
-    public static function migrateAlias( $elementList )
+    function migrateAlias( $elementList )
     {
         foreach ( $elementList as $element )
         {
@@ -47,9 +48,10 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
     /**
      * Action for migrating all custom url aliases to the migration table.
      * 
+     * @static
      * @return void
      */
-    public static function migrateAllAliases()
+    function migrateAllAliases()
     {
         $urlCount = ezpUrlAliasMigrateTool::customUrlAliasCount();
 
@@ -58,6 +60,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
         $fetchLimit = 50;
         $migrateOffset = 0;
 
+        // @TODO: PHP 4
         self::setProgressCount( $urlCount );
 
         $db = eZDB::instance();
@@ -85,6 +88,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
             {
                 $db->begin();
                 $result = $migratedAlias->store();
+                // @TODO PHP 4
                 self::doCallback( $result );
                 $db->commit();
             }
@@ -108,9 +112,10 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
      *These two values are used to uniquely identify any entry in the url alias system.
      * 
      * @param array $elementList 
+     * @static
      * @return void
      */
-    public static function restoreAlias( $elementList )
+    function restoreAlias( $elementList )
     {
         foreach ( $elementList as $element )
         {
@@ -136,9 +141,10 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
     /**
      * Action for restoring all migrated url aliases in the system.
      *
+     * @static
      * @return void
      */
-    public static function restoreAllAliases()
+    function restoreAllAliases()
     {
         $cond = array( 'is_restored' => 0,
                        'is_original' => 1 );
@@ -149,6 +155,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
         $fetchLimit = 50;
         $restoreOffset = 0;
 
+        // @TODO PHP 4
         self::setProgressCount( $count );
 
         $db = eZDB::instance();
@@ -162,6 +169,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
             {
                 $db->begin();
                 $result = $alias->analyse();
+                // @TODO PHP 4
                 self::doCallback( $result );
                 $db->commit();
             }
@@ -183,9 +191,10 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
      * separated by a dot and the text md5 value.
      *
      * @param array $elementList 
+     * @static
      * @return void
      */
-    public static function removeAlias( $elementList )
+    function removeAlias( $elementList )
     {
         foreach ( $elementList as $element )
         {
@@ -212,9 +221,10 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
     /**
      * Action for removing all migrated url aliases in the system.
      *
+     * @static
      * @return void
      */
-    public static function removeAllAliases()
+    function removeAllAliases()
     {
         $allMigratedUrls = ezpUrlAliasMigrateTool::migratedUrlAlias();
 
@@ -230,9 +240,10 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
     /**
      * Action for inserting the table needed to hold migrated url alias entries.
      *
+     * @static
      * @return void
      */
-    public static function insertMissingTable()
+    function insertMissingTable()
     {
         $db = eZDB::instance();
         $schemaFilePath = eZExtension::baseDirectory() . "/" . "urlalias/sql/";

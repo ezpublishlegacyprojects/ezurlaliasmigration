@@ -26,7 +26,7 @@ class ezpUrlAliasQueryStrict extends eZURLAliasQuery
      * Constructor
      *
      */
-    public function ezpUrlAliasQueryStrict()
+    function ezpUrlAliasQueryStrict()
     {
     }
 
@@ -38,7 +38,7 @@ class ezpUrlAliasQueryStrict extends eZURLAliasQuery
      * 
      * Overridden to make sure the correct method is being called
      */
-    public function fetchAll()
+    function fetchAll()
     {
         if ( $this->items !== null )
             return $this->items;
@@ -73,7 +73,7 @@ class ezpUrlAliasQueryStrict extends eZURLAliasQuery
      * @static
      * @return mixed
      */
-    public static function makeList( $rows, $storageMode = false )
+    function makeList( $rows, $storageMode = false )
     {
         if ( !is_array( $rows ) || count( $rows ) == 0 )
             return array();

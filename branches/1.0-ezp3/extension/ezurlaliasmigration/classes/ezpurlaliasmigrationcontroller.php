@@ -21,17 +21,19 @@ class ezpUrlAliasMigrationController
     /**
      * Name of the calllback method to use during migration operations.
      */
-    protected static $callbackMethod = null;
+    var $callbackMethod = null;
 
     /**
      * Set callback function which can be used to get progess report from the controller
      * classes when doing migration oeprations.
      *
      * @param callback $callback
+     * @static
      * @return void
      */
-    public static function setProgressCallback( $callback )
+    function setProgressCallback( $callback )
     {
+        // @TODO PHP 4
         self::$callbackMethod = $callback;
     }
 
@@ -42,11 +44,13 @@ class ezpUrlAliasMigrationController
      * triggered from web gui, no call will be made to eZScript.
      * 
      * @param int $count
+     * @static
      * @return void
      */
-    public static function setProgressCount( $count )
+    function setProgressCount( $count )
     {
         // self::$iterationMax = $count;
+        // @TODO PHP 4
         if ( self::$callbackMethod !== null )
         {
             eZScript::instance()->resetIteration( $count );
@@ -58,10 +62,12 @@ class ezpUrlAliasMigrationController
      * be performed.
      *
      * @param boolean $result 
+     * @static
      * @return void
      */
-    public static function doCallback( $result )
+    function doCallback( $result )
     {
+        // @TODO PHP 4
         if ( self::$callbackMethod !== null )
         {
             call_user_func( self::$callbackMethod, $result );

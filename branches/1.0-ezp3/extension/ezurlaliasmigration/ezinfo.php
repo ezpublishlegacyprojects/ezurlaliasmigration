@@ -10,7 +10,7 @@
 
 class ezurlaliasInfo
 {
-    public static function info()
+    function info()
     {
         return array( 'Name' => "eZ Url Alias Migration Extension",
                       'Version' => "1.0.0",

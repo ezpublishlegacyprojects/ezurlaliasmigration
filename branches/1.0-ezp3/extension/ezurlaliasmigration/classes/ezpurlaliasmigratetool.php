@@ -22,9 +22,10 @@ class ezpUrlAliasMigrateTool
      * Checks for the number for manually entered url aliases in the system
      * ezurlalias_ml table
      * 
+     * @static
      * @return string
      */
-    public static function customUrlAliasCount()
+    function customUrlAliasCount()
     {
         $db = eZDB::instance();
         $sql = 'SELECT count(*) AS count FROM ezurlalias_ml
@@ -41,9 +42,10 @@ class ezpUrlAliasMigrateTool
      *
      * @param string $offset 
      * @param string $fetchLimit 
+     * @static
      * @return mixed
      */
-    public static function customUrlAlias( $offset, $fetchLimit )
+    function customUrlAlias( $offset, $fetchLimit )
     {
         $db = eZDB::instance();
         $sql = 'SELECT * FROM ezurlalias_ml
@@ -57,9 +59,10 @@ class ezpUrlAliasMigrateTool
     /**
      * Returns the count of history url entries in the system
      *
+     * @static
      * @return string
      */
-    public static function historyUrlCount()
+    function historyUrlCount()
     {
         $db = eZDB::instance();
         $sql = 'SELECT count(*) AS count FROM ezurlalias_ml
@@ -71,9 +74,10 @@ class ezpUrlAliasMigrateTool
     /**
      * Returns history url entries
      *
+     * @static
      * @return mixed
      */
-    public static function historyUrl( $offset, $fetchLimit )
+    function historyUrl( $offset, $fetchLimit )
     {
         $db = eZDB::instance();
         $sql = 'SELECT * FROM ezurlalias_ml
@@ -93,9 +97,10 @@ class ezpUrlAliasMigrateTool
      * @param array $conditions 
      * @param string $offset 
      * @param string $limit 
+     * @static
      * @return mixed
      */
-    public static function migratedUrlAlias( $conditions = null, $offset = false, $limit = false )
+    function migratedUrlAlias( $conditions = null, $offset = false, $limit = false )
     {
         $limitParam = null;
         $asObject = false;
@@ -126,9 +131,10 @@ class ezpUrlAliasMigrateTool
      * Calculates the real path, and the action path for migration
      *
      * @param int $parentId 
+     * @static
      * @return void
      */
-    public static function extractUrlData( $parentId, $textMD5, $language )
+    function extractUrlData( $parentId, $textMD5, $language )
     {
         $db = eZDB::instance();
         $id = (int)$parentId;
@@ -172,9 +178,10 @@ class ezpUrlAliasMigrateTool
      * Makes eZINI reload its cache of debug.ini to get information from override files
      * in extensions
      *
+     * @static
      * @return void
      */
-    public static function setupDebug()
+    function setupDebug()
     {
         // We are reloading the debug.ini settings here to get overrided values from extensions
         $ini = eZINI::instance( 'debug.ini' );

@@ -8,21 +8,20 @@
  *
  */
 
-// Uncomment the includes on PHP 4 versions
-// include_once( 'kernel/classes/ezurlaliasml.php' );
+include_once( 'kernel/classes/ezurlaliasml.php' );
 
 // Using constants here for backwards compatibility with PHP 4
 // Results for alias placement
 
-// /**
-//  * Specifies an url alias on the root
-//  */
-// define( 'EZP_URLALIAS_PLACEMENT_ROOT', 0 );
+/**
+ * Denotes an url alias located on the root.
+ */
+define( 'EZP_URLALIAS_PLACEMENT_ROOT', 0 );
 
-// /**
-//  * Specifies an url alias placed under other nodes in a subtree
-//  */
-// define( 'EZP_URLALIAS_PLACEMENT_SUBTREE', 1 );
+/**
+ * Denotes an url alias located under other nodes in a subtree.
+ */
+define( 'EZP_URLALIAS_PLACEMENT_SUBTREE', 1 );
 
 /**
  * ezpMigratedUrlAlias handles operations and persistence of migrated url
@@ -36,20 +35,10 @@
 class ezpMigratedUrlAlias extends eZPersistentObject
 {
     /**
-     * Denotes an url alias located on the root.
-     */
-    const PLACEMENT_ROOT = 0;
-
-    /**
-     * Denotes an url alias located under other nodes in a subtree.
-     */
-    const PLACEMENT_SUBTREE = 1;
-
-    /**
      * Initializes a new migrated URL alias from database row.
      * If 'path' is set it will be cached in $Path.
      */
-    public function ezpMigratedUrlAlias( $row )
+    function ezpMigratedUrlAlias( $row )
     {
         $this->Path = null;
         $this->PathArray = null;
@@ -71,9 +60,10 @@ class ezpMigratedUrlAlias extends eZPersistentObject
     /**
      * Returns definition of the object
      *
+     * @static
      * @return array
      */
-    public static function definition()
+    function definition()
     {
         return array( "fields" => array( "id" => array( 'name' => 'ID',
                                                         'datatype' => 'integer',
@@ -154,7 +144,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      * @param int $id urlalias id to start path calculation at (top-element).
      * @return string
      */
-    public function getPath( $id = false )
+    function getPath( $id = false )
     {
         if ( $id === false and $this->Path !== null )
             return $this->Path;
@@ -193,7 +183,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      * @param int $id The id to start the path calculation at, i.e. the top-element.
      * @return mixed (array=>ezpMigratedUrlAlias)
      */
-    public function getPathArray( $id = false )
+    function getPathArray( $id = false )
     {
         if ( $id === false and $this->PathArray !== null )
             return $this->PathArray;
@@ -229,7 +219,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      *
      * @return int
      */
-    public function alwaysAvailable()
+    function alwaysAvailable()
     {
         if ( !is_null( $this->AlwaysAvailable ) )
         {
@@ -246,7 +236,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      * 
      * @return string
      */
-    public function actionURL()
+    function actionURL()
     {
         return eZURLAliasML::actionToUrl( $this->Action );
     }
@@ -270,7 +260,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      *
      * @return array
      */
-    public function urlData()
+    function urlData()
     {
         if ( is_null( $this->ExtraUrlData ) )
         {
@@ -284,7 +274,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      *
      * @return int
      */
-    public function checkAliasPlacement()
+    function checkAliasPlacement()
     {
         $parent = $this->attribute( 'parent' );
         $realPath = $this->attribute( 'real_path_stored' );
@@ -292,12 +282,12 @@ class ezpMigratedUrlAlias extends eZPersistentObject
         if ( $parent == 0 )
         {
             eZDebugSetting::writeDebug( "urlalias-migration-checks", "Alias is placed on root [{$realPath}]", __FUNCTION__ );
-            return self::PLACEMENT_ROOT;
+            return EZP_URLALIAS_PLACEMENT_ROOT;
         }
         else
         {
             eZDebugSetting::writeDebug( "urlalias-migration-checks", "Alias is placed under a subtree [{$realPath}]", __FUNCTION__ );
-            return self::PLACEMENT_SUBTREE;
+            return EZP_URLALIAS_PLACEMENT_SUBTREE;
         }
     }
 
@@ -306,7 +296,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      *
      * @return boolean
     */
-    public function checkAliasExists()
+    function checkAliasExists()
     {
         $path = $this->attribute( 'real_path_stored' );
         $ret = eZURLAliasML::fetchByPath( $path );
@@ -330,7 +320,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      *
      * @return boolean
      */
-    public function checkNodeExists()
+    function checkNodeExists()
     {
         $ret = false;
         $nodeId = eZURLAliasML::nodeIDFromAction( $this->attribute( 'action' ) );
@@ -370,16 +360,14 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      *
      * @return boolean
      */
-    public function checkLanguage()
+    function checkLanguage()
     {
         $ret = false;
         $oldLocale = $this->attribute( 'lang_mask');
 
         $languageObject = eZContentLanguage::fetch( $oldLocale );
 
-        // @TODO PHP 4 version:
-        // if ( $languageObject !== false )
-        if ( $languageObject instanceof eZContentLanguage )
+        if ( $languageObject !== false )
         {
             eZDebugSetting::writeDebug( "urlalias-migration-checks", "Language exists [id={$oldLocale}]", __FUNCTION__ );
             $ret = true;
@@ -402,7 +390,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      *
      * @return boolean
      */
-    public function analyse()
+    function analyse()
     {
         $ret = false;
         $aliasExtraData = $this->attribute( 'url_data' );
@@ -416,7 +404,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
              and $this->checkLanguage()
            )
         {
-            if ( $aliasPlacement == self::PLACEMENT_SUBTREE )
+            if ( $aliasPlacement == EZP_URLALIAS_PLACEMENT_SUBTREE )
             {
                 $pathWalker = new ezpUrlAliasPathWalker( $aliasExtraData );
 
@@ -440,7 +428,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
                     eZDebugSetting::writeDebug( "urlalias-migration-checks", "Restore not possible, skipping", __FUNCTION__ );
                 }
             }
-            else if ( $aliasPlacement == self::PLACEMENT_ROOT )
+            else if ( $aliasPlacement == EZP_URLALIAS_PLACEMENT_ROOT )
             {
                 eZDebugSetting::writeDebug( "urlalias-migration-checks", "Alias valid for restoration", __FUNCTION__ );
                 $ret = true;
@@ -460,7 +448,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      * @param boolean $restoreHistoryEntry
      * @return void
      */
-    public function restore( $restoreHistoryEntry = false )
+    function restore( $restoreHistoryEntry = false )
     {
         // Set up data for re-integration
         $parentID = 0;
@@ -533,7 +521,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      *
      * @return boolean
      */
-    public function isHistoryEntry()
+    function isHistoryEntry()
     {
         // Checks to put in the analyse method to filter out history entries
         $actionType = $this->attribute( 'action_type' );
@@ -550,7 +538,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      *
      * @return string
      */
-    public function realPathStored()
+    function realPathStored()
     {
         if ( !is_null( $this->RealPathStored ) )
         {

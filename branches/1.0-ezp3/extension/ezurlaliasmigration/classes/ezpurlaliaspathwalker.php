@@ -33,7 +33,7 @@ class ezpUrlAliasPathWalker
      *
      * @var string
      */
-    public $realPath = null;
+    var $realPath = null;
 
     /**
      * The full array of of action values for <var>$realPath</var>. Values ordered by
@@ -41,7 +41,7 @@ class ezpUrlAliasPathWalker
      *
      * @var array
      */
-    public $actionPath = null;
+    var $actionPath = null;
 
     /**
      * A container for the extra url data, which was stored upon url alias migration.
@@ -49,7 +49,7 @@ class ezpUrlAliasPathWalker
      *
      * @var mixed
      */
-    public $urlData = null;
+    var $urlData = null;
 
     /**
      * The alias text of the top element / leaf node from <var>$realPath</var>. That
@@ -57,14 +57,14 @@ class ezpUrlAliasPathWalker
      *
      * @var string
      */
-    public $aliasText = null;
+    var $aliasText = null;
 
     /**
      * Holds the action value for <var>$aliasText</var>
      *
      * @var string
      */
-    public $aliasAction = null;
+    var $aliasAction = null;
 
     /**
      * Holds the parent path of $realPath. That is <var>$realPath</var>,
@@ -72,14 +72,14 @@ class ezpUrlAliasPathWalker
      *
      * @var string
      */
-    public $parentPath = null;
+    var $parentPath = null;
 
     /**
      * Holds the action values for <var>$parentPath</var>.
      *
      * @var array
      */
-    public $parentActionPath = null;
+    var $parentActionPath = null;
 
     /**
      * Holds a reference to the ezpUrlAliasPathWalker object for the $parentPath of this
@@ -87,21 +87,21 @@ class ezpUrlAliasPathWalker
      *
      * @var ezpUrlAliasPathWalker
      */
-    public $parent = null;
+    var $parent = null;
 
     /**
      * Holds thew new element id to be used as root for the current alias of this object.
      *
      * @var int
      */
-    public $root = null;
+    var $root = null;
 
     /**
      * Holds the url alias element for <var>$parentPath</var>
      * 
      * @var eZURLAliasML
      */
-    public $urlElement = null;
+    var $urlElement = null;
 
     /**
      * Constructor
@@ -118,7 +118,7 @@ class ezpUrlAliasPathWalker
      *
      * @param array $urlData 
      */
-    public function ezpUrlAliasPathWalker( $urlData = null )
+    function ezpUrlAliasPathWalker( $urlData = null )
     {
         if ( is_array( $urlData ) )
         {
@@ -140,7 +140,7 @@ class ezpUrlAliasPathWalker
      *
      * @return string
      */
-    public function parentPath()
+    function parentPath()
     {
         if ( !is_null( $this->parentPath ) )
         {
@@ -156,7 +156,7 @@ class ezpUrlAliasPathWalker
      * 
      * @return array
      */
-    public function parentActionPath()
+    function parentActionPath()
     {
         if ( !is_null( $this->parentActionPath ) )
         {
@@ -174,9 +174,10 @@ class ezpUrlAliasPathWalker
      * 
      * Specifically this method sets up the parent path, and parent action path information.
      *
+     * @access protected
      * @return void
      */
-    protected function init()
+    function init()
     {
         // Ready infomration about paths
         if ( !empty( $this->realPath ) )
@@ -208,7 +209,7 @@ class ezpUrlAliasPathWalker
      *
      * @return boolean
      */
-    public function checkPath()
+    function checkPath()
     {
         $ret = true;
         $pp = $this->parentPath();
@@ -305,7 +306,7 @@ class ezpUrlAliasPathWalker
      * @param eZURLAliasML $topElement 
      * @return mixed
      */
-    public function getPathArray( $topElement )
+    function getPathArray( $topElement )
     {
         // @TODO: remove check for PHP 4 version
         if ( !$topElement instanceof eZURLAliasML )
@@ -341,9 +342,10 @@ class ezpUrlAliasPathWalker
      * Fetches and initialises the class' url element. This element is the element
      * of parent path.
      *
+     * @access protected
      * @return void
      */
-    protected function initUrlElement()
+    function initUrlElement()
     {
         $urlEntries = eZURLAliasML::fetchByPath( $this->parentPath() );
         if ( count( $urlEntries ) > 0 )
@@ -359,7 +361,7 @@ class ezpUrlAliasPathWalker
      *
      * @return int
      */
-    public function newAliasRoot()
+    function newAliasRoot()
     {
         // if this method is called a success for restoration of path elements should have occured, try to refetch, the correct value
         if ( is_null( $this->urlElement ) )
@@ -372,9 +374,10 @@ class ezpUrlAliasPathWalker
     /**
      * Checks if the current alias being inspected is a virtual path element
      *
+     * @access protected
      * @return boolean
      */
-    protected function isVirtualPathElement()
+    function isVirtualPathElement()
     {
         $this->init();
         return $this->aliasAction == "nop:";
@@ -386,7 +389,7 @@ class ezpUrlAliasPathWalker
      *
      * @return mixed
      */
-    public function newAliasInfo()
+    function newAliasInfo()
     {
         return array( $this->aliasText, $this->aliasAction );
     }

@@ -18,9 +18,10 @@ class ezpUrlAliasHistoryController extends ezpUrlAliasMigrationController
     /**
      * Action for migrating all existing url history entries to the migration table.
      * 
+     * @static
      * @return void
      */
-    public static function migrateHistoryEntries()
+    function migrateHistoryEntries()
     {
         $historyUrlCount = ezpUrlAliasMigrateTool::historyUrlCount();
 
@@ -29,6 +30,7 @@ class ezpUrlAliasHistoryController extends ezpUrlAliasMigrationController
         $fetchLimit = 50;
         $migrateOffset = 0;
 
+        // @TODO PHP 4
         self::setProgressCount( $historyUrlCount );
 
         $db = eZDB::instance();
@@ -48,6 +50,7 @@ class ezpUrlAliasHistoryController extends ezpUrlAliasMigrationController
             {
                 $db->begin();
                 $result = $historyEntry->store();
+                // @TODO PHP 4
                 self::doCallback( $result );
                 $db->commit();
             }
@@ -62,9 +65,10 @@ class ezpUrlAliasHistoryController extends ezpUrlAliasMigrationController
     /**
      * Action for restoring migrated url history entries.
      * 
+     * @static
      * @return void
      */
-    public static function restoreHistoryEntries()
+    function restoreHistoryEntries()
     {
         $cond = array();
         $cond = array( 'is_restored' => 0,
@@ -76,6 +80,7 @@ class ezpUrlAliasHistoryController extends ezpUrlAliasMigrationController
         $fetchLimit = 50;
         $restoreOffset = 0;
 
+        // @TODO PHP 4
         self::setProgressCount( $historyMigrateCount );
 
         $db = eZDB::instance();
