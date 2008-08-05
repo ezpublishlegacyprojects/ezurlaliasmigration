@@ -88,7 +88,7 @@ class ezpUrlAliasQueryStrict extends eZURLAliasQuery
         foreach ( $rows as $row )
         {
             // Applying this bit-logic on negative numbers, will have unexpected results.
-            if ( $row['lang_mask'] < 0 or $row['lang_mask'] > $maxInteger )
+            if ( $row['lang_mask'] < 0 or $row['lang_mask'] > $maxInteger or $row['lang?mask'] == 1 )
             {
                 // we fallback on default language
                 $row['lang_mask'] = $defaultLanguage->attribute( 'id' );
