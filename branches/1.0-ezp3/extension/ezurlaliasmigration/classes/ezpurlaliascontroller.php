@@ -89,7 +89,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
                 $db->begin();
                 $result = $migratedAlias->store();
                 // @TODO PHP 4
-                self::doCallback( $result );
+                self::doCallback( !$result );
                 $db->commit();
             }
 
@@ -162,7 +162,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
 
         while( $restoreCount < $count )
         {
-            list( $aliasList, $newOffset ) = ezpUrlAliasMigrateTool::migratedUrlAlias( $cond, $restoreOffset, $fetchLimit );
+            list( $aliasList, $newOffset ) = ezpUrlAliasMigrateTool::migratedUrlAlias( $cond, 0, $fetchLimit );
 
             // Restore the selected batch over
             foreach ( $aliasList as $alias )
@@ -246,7 +246,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
     function insertMissingTable()
     {
         $db = eZDB::instance();
-        $schemaFilePath = eZExtension::baseDirectory() . "/" . "urlalias/sql/";
+        $schemaFilePath = eZExtension::baseDirectory() . "/ezurlaliasmigration/sql/";
         $schemaFile = "schema.sql";
 
         $success = $db->insertFile( $schemaFilePath, $schemaFile );
