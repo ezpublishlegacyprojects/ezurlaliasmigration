@@ -335,12 +335,14 @@ class ezpMigratedUrlAlias extends eZPersistentObject
             {
                 if ( $object->attribute( 'status' ) == EZ_CONTENT_OBJECT_STATUS_PUBLISHED )
                 {
-                    eZDebugSetting::writeDebug( "urlalias-migration-checks", "Object is published [id={$object->attribute( 'id' )}]", __FUNCTION__ );
+                    $objId = $object->attribute( 'id' );
+                    eZDebugSetting::writeDebug( "urlalias-migration-checks", "Object is published [id={$objId}]", __FUNCTION__ );
                     $ret = true;
                 }
                 else
                 {
-                    eZDebugSetting::writeDebug( "urlalias-migration-checks", "Object is not published [id={$object->attribute( 'id' )}]", __FUNCTION__ );
+                    $objId = $object->attribute( 'id' );
+                    eZDebugSetting::writeDebug( "urlalias-migration-checks", "Object is not published [id={$objId}]", __FUNCTION__ );
                 }
             }
 
@@ -416,7 +418,8 @@ class ezpMigratedUrlAlias extends eZPersistentObject
                     eZDebugSetting::writeDebug( "urlalias-migration-checks", "New root for alias will be: {$newRoot}", __FUNCTION__ );
 
                     list( $alias, $action ) = $pathWalker->newAliasInfo();
-                    eZDebugSetting::writeDebug( "urlalias-migration-checks", "$alias pointing to $action can be recreated at {$pathWalker->parentPath()}" );
+                    $patWalkerParentPath = $pathWalker->parentPath();
+                    eZDebugSetting::writeDebug( "urlalias-migration-checks", "$alias pointing to $action can be recreated at {$patWalkerParentPath}" );
 
                     $ret = true;
                     $this->restore( $isHistoryEntry );
