@@ -48,7 +48,7 @@ class ezpUrlAliasHistoryController extends ezpUrlAliasMigrationController
             {
                 $db->begin();
                 $result = $historyEntry->store();
-                self::doCallback( $result );
+                self::doCallback( !$result );
                 $db->commit();
             }
 
