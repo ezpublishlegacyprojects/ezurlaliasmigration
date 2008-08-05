@@ -235,7 +235,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
     public static function insertMissingTable()
     {
         $db = eZDB::instance();
-        $schemaFilePath = eZExtension::baseDirectory() . "/" . "urlalias/sql/";
+        $schemaFilePath = eZExtension::baseDirectory() . "/ezurlaliasmigration/sql/";
         $schemaFile = "schema.sql";
 
         $success = $db->insertFile( $schemaFilePath, $schemaFile );
