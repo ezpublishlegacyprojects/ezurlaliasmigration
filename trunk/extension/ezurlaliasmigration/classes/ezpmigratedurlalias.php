@@ -8,22 +8,6 @@
  *
  */
 
-// Uncomment the includes on PHP 4 versions
-// include_once( 'kernel/classes/ezurlaliasml.php' );
-
-// Using constants here for backwards compatibility with PHP 4
-// Results for alias placement
-
-// /**
-//  * Specifies an url alias on the root
-//  */
-// define( 'EZP_URLALIAS_PLACEMENT_ROOT', 0 );
-
-// /**
-//  * Specifies an url alias placed under other nodes in a subtree
-//  */
-// define( 'EZP_URLALIAS_PLACEMENT_SUBTREE', 1 );
-
 /**
  * ezpMigratedUrlAlias handles operations and persistence of migrated url
  * aliases.
@@ -343,8 +327,6 @@ class ezpMigratedUrlAlias extends eZPersistentObject
 
             if ( $object )
             {
-                // PHP 4 compatible statement
-                // if ( $object->attribute( 'status' ) == EZ_CONTENT_OBJECT_STATUS_PUBLISHED )
                 if ( $object->attribute( 'status' ) == eZContentObject::STATUS_PUBLISHED )
                 {
                     eZDebugSetting::writeDebug( "urlalias-migration-checks", "Object is published [id={$object->attribute( 'id' )}]", __FUNCTION__ );
@@ -377,8 +359,6 @@ class ezpMigratedUrlAlias extends eZPersistentObject
 
         $languageObject = eZContentLanguage::fetch( $oldLocale );
 
-        // @TODO PHP 4 version:
-        // if ( $languageObject !== false )
         if ( $languageObject instanceof eZContentLanguage )
         {
             eZDebugSetting::writeDebug( "urlalias-migration-checks", "Language exists [id={$oldLocale}]", __FUNCTION__ );
@@ -522,7 +502,6 @@ class ezpMigratedUrlAlias extends eZPersistentObject
             $element = new eZURLAliasML( $options );
             $element->store();
 
-            // @TODO: add some checks to verify this element creation was successful before marking as restored.
             $this->setAttribute( 'is_restored', 1 );
             $this->store();
         }

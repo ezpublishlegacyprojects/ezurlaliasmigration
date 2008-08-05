@@ -80,7 +80,6 @@ class ezpUrlAliasQueryStrict extends eZURLAliasQuery
 
         $list = array();
 
-        // @TODO PHP 4 constant to be used here
         $maxNumberOfLanguges = eZContentLanguage::MAX_COUNT;
         $maxInteger = pow( 2, $maxNumberOfLanguges );
         $defaultLanguage = eZContentLanguage::topPriorityLanguage();
@@ -124,8 +123,6 @@ class ezpUrlAliasQueryStrict extends eZURLAliasQuery
             }
         }
 
-        // @TODO: Uncomment in PHP 4
-        //include_once( 'extension/urlalias/classes/ezpmigratedurlalias.php' );
         $objectList = eZPersistentObject::handleRows( $list, 'ezpMigratedUrlAlias', true );
         return $objectList;
     }

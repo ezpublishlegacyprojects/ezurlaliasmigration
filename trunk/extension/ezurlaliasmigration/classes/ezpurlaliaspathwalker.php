@@ -307,7 +307,6 @@ class ezpUrlAliasPathWalker
      */
     public function getPathArray( $topElement )
     {
-        // @TODO: remove check for PHP 4 version
         if ( !$topElement instanceof eZURLAliasML )
         {
             return array();
