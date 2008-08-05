@@ -510,7 +510,6 @@ class ezpMigratedUrlAlias extends eZPersistentObject
             $element = new eZURLAliasML( $options );
             $element->store();
 
-            // @TODO: add some checks to verify this element creation was successful before marking as restored.
             $this->setAttribute( 'is_restored', 1 );
             $this->store();
         }

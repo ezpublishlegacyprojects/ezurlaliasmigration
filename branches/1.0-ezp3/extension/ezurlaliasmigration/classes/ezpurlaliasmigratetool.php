@@ -8,6 +8,12 @@
  *
  */
 
+include_once( 'lib/ezdb/classes/ezdb.php' );
+include_once( 'kernel/classes/ezpersistentobject.php' );
+include_once( 'kernel/classes/ezurlaliasml.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpmigratedurlalias.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezurlaliasquerystrict.php' );
+
 /**
  * ezpUrlAliasMigrateTool contains utility methods which are shared within the Url
  * Alias migration extension
@@ -27,7 +33,7 @@ class ezpUrlAliasMigrateTool
      */
     function customUrlAliasCount()
     {
-        $db = eZDB::instance();
+        $db =& eZDB::instance();
         $sql = 'SELECT count(*) AS count FROM ezurlalias_ml
                 WHERE action_type IN ("eznode", "module") AND is_original = 1 AND is_alias = 1';
         $rows = $db->arrayQuery( $sql );
@@ -47,7 +53,7 @@ class ezpUrlAliasMigrateTool
      */
     function customUrlAlias( $offset, $fetchLimit )
     {
-        $db = eZDB::instance();
+        $db =& eZDB::instance();
         $sql = 'SELECT * FROM ezurlalias_ml
                 WHERE action_type IN ("eznode", "module") AND is_original = 1 AND is_alias = 1';
         $rows = $db->arrayQuery( $sql,
@@ -64,7 +70,7 @@ class ezpUrlAliasMigrateTool
      */
     function historyUrlCount()
     {
-        $db = eZDB::instance();
+        $db =& eZDB::instance();
         $sql = 'SELECT count(*) AS count FROM ezurlalias_ml
                 WHERE action_type != "nop" AND is_original = 0 AND is_alias = 0';
         $rows = $db->arrayQuery( $sql );
@@ -79,7 +85,7 @@ class ezpUrlAliasMigrateTool
      */
     function historyUrl( $offset, $fetchLimit )
     {
-        $db = eZDB::instance();
+        $db =& eZDB::instance();
         $sql = 'SELECT * FROM ezurlalias_ml
                 WHERE action_type != "nop" AND is_original = 0 AND is_alias = 0';
         $rows = $db->arrayQuery( $sql,
@@ -136,7 +142,7 @@ class ezpUrlAliasMigrateTool
      */
     function extractUrlData( $parentId, $textMD5, $language )
     {
-        $db = eZDB::instance();
+        $db =& eZDB::instance();
         $id = (int)$parentId;
 
         $rows = $db->arrayQuery( "SELECT * FROM ezurlalias_ml WHERE parent = {$id} AND text_md5 = '" . $db->escapeString( $textMD5 ) . "'" );
@@ -183,8 +189,10 @@ class ezpUrlAliasMigrateTool
      */
     function setupDebug()
     {
+        include_once( "lib/ezutils/classes/ezini.php" );
+
         // We are reloading the debug.ini settings here to get overrided values from extensions
-        $ini = eZINI::instance( 'debug.ini' );
+        $ini =& eZINI::instance( 'debug.ini' );
         $ini->loadCache();
     }
 }

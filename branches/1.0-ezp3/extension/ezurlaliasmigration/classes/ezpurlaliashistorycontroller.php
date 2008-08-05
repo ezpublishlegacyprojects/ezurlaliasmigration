@@ -8,6 +8,13 @@
  *
  */
 
+include_once( 'lib/ezdb/classes/ezdb.php' );
+include_once( 'kernel/classes/ezpersistentobject.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliasmigrationcontroller.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliasmigratetool.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpmigratedurlalias.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezurlaliasquerystrict.php' );
+
 /**
  * Controller class for migrationg and restoring url history entries
  *
@@ -30,10 +37,9 @@ class ezpUrlAliasHistoryController extends ezpUrlAliasMigrationController
         $fetchLimit = 50;
         $migrateOffset = 0;
 
-        // @TODO PHP 4
-        self::setProgressCount( $historyUrlCount );
+        ezpUrlAliasMigrationController::setProgressCount( $historyUrlCount );
 
-        $db = eZDB::instance();
+        $db =& eZDB::instance();
 
         while( $migrateCount < $historyUrlCount )
         {
@@ -50,8 +56,7 @@ class ezpUrlAliasHistoryController extends ezpUrlAliasMigrationController
             {
                 $db->begin();
                 $result = $historyEntry->store();
-                // @TODO PHP 4
-                self::doCallback( !$result );
+                ezpUrlAliasMigrationController::doCallback( $result );
                 $db->commit();
             }
 
@@ -80,10 +85,9 @@ class ezpUrlAliasHistoryController extends ezpUrlAliasMigrationController
         $fetchLimit = 50;
         $restoreOffset = 0;
 
-        // @TODO PHP 4
-        self::setProgressCount( $historyMigrateCount );
+        ezpUrlAliasMigrationController::setProgressCount( $historyMigrateCount );
 
-        $db = eZDB::instance();
+        $db =& eZDB::instance();
 
         while ( $restoreCount < $historyMigrateCount )
         {
@@ -93,7 +97,7 @@ class ezpUrlAliasHistoryController extends ezpUrlAliasMigrationController
             {
                 $db->begin();
                 $result = $entry->analyse();
-                self::doCallback( $result );
+                ezpUrlAliasMigrationController::doCallback( $result );
                 $db->commit();
             }
 

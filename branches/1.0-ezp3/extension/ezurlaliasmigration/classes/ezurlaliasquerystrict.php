@@ -8,6 +8,9 @@
  *
  */
 
+include_once( 'kernel/classes/ezpersistentobject.php' );
+include_once( 'kernel/classes/ezurlaliasquery.php' );
+
 /**
  * The ezpUrlAliasQueryStrict class simply provides the same functionality as
  * eZURLAliasQuery, with one difference, it does more checks to verify that the
@@ -80,8 +83,8 @@ class ezpUrlAliasQueryStrict extends eZURLAliasQuery
 
         $list = array();
 
-        // @TODO PHP 4 constant to be used here
-        $maxNumberOfLanguges = eZContentLanguage::MAX_COUNT;
+        include_once( 'kernel/classes/ezcontentlanguage.php' );
+        $maxNumberOfLanguges = CONTENT_LANGUAGES_MAX_COUNT;
         $maxInteger = pow( 2, $maxNumberOfLanguges );
         $defaultLanguage = eZContentLanguage::topPriorityLanguage();
 
@@ -124,8 +127,7 @@ class ezpUrlAliasQueryStrict extends eZURLAliasQuery
             }
         }
 
-        // @TODO: Uncomment in PHP 4
-        //include_once( 'extension/urlalias/classes/ezpmigratedurlalias.php' );
+        include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpmigratedurlalias.php' );
         $objectList = eZPersistentObject::handleRows( $list, 'ezpMigratedUrlAlias', true );
         return $objectList;
     }

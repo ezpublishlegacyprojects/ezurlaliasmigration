@@ -8,6 +8,10 @@
  *
  */
 
+include_once( 'kernel/classes/ezurlaliasml.php' );
+include_once( "lib/ezutils/classes/ezdebug.php" );
+include_once( "lib/ezutils/classes/ezdebugsetting.php" );
+
 /**
 * The ezpUrlAliasPathWalker class represents a full url alias path, it contains
 * methods to verify and add missing path elements.
@@ -308,8 +312,8 @@ class ezpUrlAliasPathWalker
      */
     function getPathArray( $topElement )
     {
-        // @TODO: remove check for PHP 4 version
-        if ( !$topElement instanceof eZURLAliasML )
+        $class = strtolower( get_class( $topElement ) );
+        if ( $class !== 'ezurlaliasml' )
         {
             return array();
         }

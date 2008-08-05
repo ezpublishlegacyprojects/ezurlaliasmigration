@@ -8,6 +8,15 @@
  *
  */
 
+include_once( 'lib/ezdb/classes/ezdb.php' );
+include_once( 'kernel/classes/ezpersistentobject.php' );
+include_once( "lib/ezutils/classes/ezdebug.php" );
+include_once( "lib/ezutils/classes/ezdebugsetting.php" );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliasmigrationcontroller.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliasmigratetool.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpmigratedurlalias.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezurlaliasquerystrict.php' );
+
 /**
  * ezpUrlAliasController implements the actions of the urlalias/mgirate and urlalias/restore view
  *
@@ -32,7 +41,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
                 $textMD5  = $matches[2];
                 $language = $matches[3];
 
-                $db = eZDB::instance();
+                $db =& eZDB::instance();
                 $rows = $db->arrayQuery( "SELECT * FROM ezurlalias_ml WHERE parent = {$parentID} AND text_md5 = '" . $db->escapeString( $textMD5 ) . "'" );
                 $rows[0]['extra_data'] = ezpUrlAliasMigrateTool::extractUrlData( $parentID, $textMD5, $language );
 
@@ -60,10 +69,9 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
         $fetchLimit = 50;
         $migrateOffset = 0;
 
-        // @TODO: PHP 4
-        self::setProgressCount( $urlCount );
+        ezpUrlAliasMigrationController::setProgressCount( $urlCount );
 
-        $db = eZDB::instance();
+        $db =& eZDB::instance();
 
         while( $migrateCount < $urlCount )
         {
@@ -88,8 +96,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
             {
                 $db->begin();
                 $result = $migratedAlias->store();
-                // @TODO PHP 4
-                self::doCallback( !$result );
+                ezpUrlAliasMigrationController::doCallback( $result );
                 $db->commit();
             }
 
@@ -155,10 +162,9 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
         $fetchLimit = 50;
         $restoreOffset = 0;
 
-        // @TODO PHP 4
-        self::setProgressCount( $count );
+        ezpUrlAliasMigrationController::setProgressCount( $count );
 
-        $db = eZDB::instance();
+        $db =& eZDB::instance();
 
         while( $restoreCount < $count )
         {
@@ -169,8 +175,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
             {
                 $db->begin();
                 $result = $alias->analyse();
-                // @TODO PHP 4
-                self::doCallback( $result );
+                ezpUrlAliasMigrationController::doCallback( $result );
                 $db->commit();
             }
 
@@ -207,7 +212,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
                             "text_md5" => $textMD5 );
                 $selMigAliasList = ezpUrlAliasMigrateTool::migratedUrlAlias( $c );
 
-                $db = eZDB::instance();
+                $db =& eZDB::instance();
                 $db->begin();
                 foreach( $selMigAliasList[0] as $migAlias )
                 {
@@ -228,7 +233,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
     {
         $allMigratedUrls = ezpUrlAliasMigrateTool::migratedUrlAlias();
 
-        $db = eZDB::instance();
+        $db =& eZDB::instance();
         $db->begin();
         foreach ( $allMigratedUrls[0] as $url )
         {
@@ -245,7 +250,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
      */
     function insertMissingTable()
     {
-        $db = eZDB::instance();
+        $db =& eZDB::instance();
         $schemaFilePath = eZExtension::baseDirectory() . "/ezurlaliasmigration/sql/";
         $schemaFile = "schema.sql";
 

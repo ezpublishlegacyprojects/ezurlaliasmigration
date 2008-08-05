@@ -9,15 +9,18 @@
  *
  */
 
+include_once( 'lib/ezutils/classes/ezcli.php' );
+include_once( 'kernel/classes/ezscript.php' );
+include_once( 'lib/ezutils/classes/ezextension.php' );
+include_once( 'kernel/classes/ezcontentlanguage.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliasmigrationcontroller.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliascontroller.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliashistorycontroller.php' );
+
 set_time_limit( 0 );
 
-/**
- * Autoload system
- */
-require_once 'autoload.php';
-
-$cli = eZCLI::instance();
-$script = eZScript::instance( array( 'description' => ( "eZ Publish url alias migration tool\n\n" .
+$cli =& eZCLI::instance();
+$script =& eZScript::instance( array( 'description' => ( "eZ Publish url alias migration tool\n\n" .
                                                         "Running this script with no options will display the number of custom url aliases\n" .
                                                         "and url history elements, it will also check if the migration table exists on the system.\n" .
                                                         "\n" .
@@ -126,7 +129,7 @@ if ( $doOverviewOutput )
     $cli->output( "" );
 
     // Check the site has the migration table present
-    $db = eZDB::instance();
+    $db =& eZDB::instance();
     $tables = $db->eZTableList();
     if ( !array_key_exists( "ezurlalias_ml_migrate", $tables ) )
     {
