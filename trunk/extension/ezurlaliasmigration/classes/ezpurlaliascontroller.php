@@ -85,7 +85,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
             {
                 $db->begin();
                 $result = $migratedAlias->store();
-                self::doCallback( $result );
+                self::doCallback( !$result );
                 $db->commit();
             }
 
