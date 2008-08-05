@@ -245,7 +245,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      * Returns the eZContentLanguage object which maches the element language mask.
      * @return eZContentLanguage|false
      */
-    public function getLanguage()
+    function getLanguage()
     {
         return eZContentLanguage::fetch( $this->LangMask );
     }
@@ -333,9 +333,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
 
             if ( $object )
             {
-                // PHP 4 compatible statement
-                // if ( $object->attribute( 'status' ) == EZ_CONTENT_OBJECT_STATUS_PUBLISHED )
-                if ( $object->attribute( 'status' ) == eZContentObject::STATUS_PUBLISHED )
+                if ( $object->attribute( 'status' ) == EZ_CONTENT_OBJECT_STATUS_PUBLISHED )
                 {
                     eZDebugSetting::writeDebug( "urlalias-migration-checks", "Object is published [id={$object->attribute( 'id' )}]", __FUNCTION__ );
                     $ret = true;

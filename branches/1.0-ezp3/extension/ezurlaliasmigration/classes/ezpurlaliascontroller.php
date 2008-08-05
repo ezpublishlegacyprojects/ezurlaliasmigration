@@ -81,10 +81,11 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
 
             // Future optimalisation possible, to merge the extract url data and
             // makeList() to get one loop instead of 2 over the rows.
-            foreach ( $aliasList as &$entry )
+            foreach ( $aliasList as $key => $entry )
             {
+                $item =& $aliasList[$key];
                 // Language not needed here anymore, the object will contain the correct lang-mask directly
-                $entry['extra_data'] = ezpUrlAliasMigrateTool::extractUrlData( $entry['parent'], $entry['text_md5'], null );
+                $item['extra_data'] = ezpUrlAliasMigrateTool::extractUrlData( $item['parent'], $item['text_md5'], null );
             }
 
             // Use the makeList() method to create array of ezpMigratedUrlAlias objects

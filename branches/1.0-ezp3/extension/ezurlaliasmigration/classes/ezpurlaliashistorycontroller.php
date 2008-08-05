@@ -45,9 +45,10 @@ class ezpUrlAliasHistoryController extends ezpUrlAliasMigrationController
         {
             list( $historyUrlArray, $newOffset ) = ezpUrlAliasMigrateTool::historyUrl( $migrateOffset, $fetchLimit );
 
-            foreach ( $historyUrlArray as &$entry )
+            foreach ( $historyUrlArray as $key => $entry )
             {
-                $entry['extra_data'] = ezpUrlAliasMigrateTool::extractUrlData( $entry['parent'], $entry['text_md5'], null );
+                $item =& $historyUrlArray[$key];
+                $item['extra_data'] = ezpUrlAliasMigrateTool::extractUrlData( $item['parent'], $item['text_md5'], null );
             }
 
             $historyCopyArray = ezpUrlAliasQueryStrict::makeList( $historyUrlArray, true );
