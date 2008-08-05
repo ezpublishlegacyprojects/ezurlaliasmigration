@@ -82,7 +82,7 @@ class ezpUrlAliasHistoryController extends ezpUrlAliasMigrationController
 
         while ( $restoreCount < $historyMigrateCount )
         {
-            list( $historyArray, $newOffset ) = ezpUrlAliasMigrateTool::migratedUrlAlias( $cond, $restoreOffset, $fetchLimit );
+            list( $historyArray, $newOffset ) = ezpUrlAliasMigrateTool::migratedUrlAlias( $cond, 0, $fetchLimit );
 
             foreach ( $historyArray as $entry )
             {

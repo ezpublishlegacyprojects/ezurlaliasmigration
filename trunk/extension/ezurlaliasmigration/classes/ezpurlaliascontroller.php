@@ -155,7 +155,7 @@ class ezpUrlAliasController extends ezpUrlAliasMigrationController
 
         while( $restoreCount < $count )
         {
-            list( $aliasList, $newOffset ) = ezpUrlAliasMigrateTool::migratedUrlAlias( $cond, $restoreOffset, $fetchLimit );
+            list( $aliasList, $newOffset ) = ezpUrlAliasMigrateTool::migratedUrlAlias( $cond, 0, $fetchLimit );
 
             // Restore the selected batch over
             foreach ( $aliasList as $alias )
