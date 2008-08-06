@@ -13,7 +13,7 @@ include_once( 'kernel/classes/ezpersistentobject.php' );
 include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliasmigrationcontroller.php' );
 include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliasmigratetool.php' );
 include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpmigratedurlalias.php' );
-include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezurlaliasquerystrict.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliasquerystrict.php' );
 
 /**
  * Controller class for migrationg and restoring url history entries

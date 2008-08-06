@@ -15,7 +15,7 @@ include_once( "lib/ezutils/classes/ezdebugsetting.php" );
 include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliasmigrationcontroller.php' );
 include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliasmigratetool.php' );
 include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpmigratedurlalias.php' );
-include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezurlaliasquerystrict.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliasquerystrict.php' );
 
 /**
  * ezpUrlAliasController implements the actions of the urlalias/mgirate and urlalias/restore view

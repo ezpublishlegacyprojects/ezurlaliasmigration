@@ -12,7 +12,7 @@ include_once( 'lib/ezdb/classes/ezdb.php' );
 include_once( 'kernel/classes/ezpersistentobject.php' );
 include_once( 'kernel/classes/ezurlaliasml.php' );
 include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpmigratedurlalias.php' );
-include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezurlaliasquerystrict.php' );
+include_once( eZExtension::baseDirectory() . '/ezurlaliasmigration/classes/ezpurlaliasquerystrict.php' );
 
 /**
  * ezpUrlAliasMigrateTool contains utility methods which are shared within the Url
