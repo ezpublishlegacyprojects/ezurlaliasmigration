@@ -8,6 +8,9 @@
  *
  */
 
+include_once( eZExtension::baseDirectory() . "/ezurlaliasmigration/classes/ezpurlaliasmigratetool.php" );
+include_once( 'kernel/classes/ezpreferences.php' );
+
 ezpUrlAliasMigrateTool::setupDebug();
 
 require_once 'kernel/common/template.php';
