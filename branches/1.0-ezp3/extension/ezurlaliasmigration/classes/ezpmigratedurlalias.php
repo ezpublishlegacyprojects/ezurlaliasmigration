@@ -9,7 +9,8 @@
  */
 
 include_once( 'kernel/classes/ezurlaliasml.php' );
-
+include_once( 'kernel/classes/ezcontentobjecttreenode.php' );
+include_once( eZExtension::baseDirectory() . "/ezurlaliasmigration/classes/ezpurlaliaspathwalker.php"  );
 // Using constants here for backwards compatibility with PHP 4
 // Results for alias placement
 
