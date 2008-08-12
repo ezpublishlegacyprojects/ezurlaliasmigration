@@ -77,7 +77,6 @@ else if ( $Module->isCurrentAction( 'MigrateAllAliases' ) )
 {
     ezpUrlAliasController::migrateAllAliases();
     $infoCode = "feedback-migrate-all";
-    $infoData['migrate-all-count'] = $migrateCount;
 }
 
 
