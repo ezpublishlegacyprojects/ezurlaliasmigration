@@ -65,7 +65,7 @@ class ezpUrlAliasMigrationController
         $callback =& $GLOBALS['ezpUrlAliasMigrationController-callbackMethod'];
         if ( $callback !== null )
         {
-            call_user_func( $callbackMethod, $result );
+            call_user_func( $callback, $result );
         }
     }
 }

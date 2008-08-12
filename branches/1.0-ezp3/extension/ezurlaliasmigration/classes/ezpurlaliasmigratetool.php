@@ -194,6 +194,7 @@ class ezpUrlAliasMigrateTool
         // We are reloading the debug.ini settings here to get overrided values from extensions
         $ini =& eZINI::instance( 'debug.ini' );
         $ini->loadCache();
+        eZDebugSetting::setDebugINI( $ini );
     }
 }
 

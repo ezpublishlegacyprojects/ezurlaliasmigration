@@ -145,7 +145,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      * @param int $id urlalias id to start path calculation at (top-element).
      * @return string
      */
-    function getPath( $id = false )
+    function &getPath( $id = false )
     {
         if ( $id === false and $this->Path !== null )
             return $this->Path;
@@ -184,7 +184,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      * @param int $id The id to start the path calculation at, i.e. the top-element.
      * @return mixed (array=>ezpMigratedUrlAlias)
      */
-    function getPathArray( $id = false )
+    function &getPathArray( $id = false )
     {
         if ( $id === false and $this->PathArray !== null )
             return $this->PathArray;
@@ -220,7 +220,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      *
      * @return int
      */
-    function alwaysAvailable()
+    function &alwaysAvailable()
     {
         if ( !is_null( $this->AlwaysAvailable ) )
         {
@@ -237,18 +237,20 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      * 
      * @return string
      */
-    function actionURL()
+    function &actionURL()
     {
-        return eZURLAliasML::actionToUrl( $this->Action );
+        $retVal = eZURLAliasML::actionToUrl( $this->Action );
+        return $retVal;
     }
 
     /**
      * Returns the eZContentLanguage object which maches the element language mask.
      * @return eZContentLanguage|false
      */
-    function getLanguage()
+    function &getLanguage()
     {
-        return eZContentLanguage::fetch( $this->LangMask );
+        $retVal = eZContentLanguage::fetch( $this->LangMask );
+        return $retVal;
     }
 
     /**
@@ -261,7 +263,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      *
      * @return array
      */
-    function urlData()
+    function &urlData()
     {
         if ( is_null( $this->ExtraUrlData ) )
         {
@@ -583,7 +585,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      *
      * @return string
      */
-    function realPathStored()
+    function &realPathStored()
     {
         if ( !is_null( $this->RealPathStored ) )
         {
