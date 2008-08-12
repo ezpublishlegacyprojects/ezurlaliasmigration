@@ -8,3 +8,4 @@ Bugs
 ----
 
 - Fixed bug #13475: global aliases aren't restored when migrating url aliases in 4.0.1rc2
+- Several PHP 4 issues were fixing, arising from backporting from the PHP 5 codebase
