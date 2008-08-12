@@ -318,40 +318,76 @@ class ezpMigratedUrlAlias extends eZPersistentObject
      * Checks if the node destination for eznode actions are present in the system.
      * Next if the node is present, the content object is checked to verify it
      * is in a published state.
+     * 
+     * For module actions the function checks if the specified module exists
+     * in the system.
      *
      * @return boolean
      */
-    function checkNodeExists()
+    function checkDestinationExists()
     {
         $ret = false;
         $nodeId = eZURLAliasML::nodeIDFromAction( $this->attribute( 'action' ) );
-        $node = eZContentObjectTreeNode::fetch( $nodeId );
-        if ( $node )
+        if ( $nodeId )
         {
-            eZDebugSetting::writeDebug( "urlalias-migration-checks", "Node exists [node_id={$nodeId}]", __FUNCTION__ );
-            // Check that content object is published
-            $object = $node->attribute( 'object' );
-
-            if ( $object )
+            $node = eZContentObjectTreeNode::fetch( $nodeId );
+            if ( $node )
             {
-                if ( $object->attribute( 'status' ) == EZ_CONTENT_OBJECT_STATUS_PUBLISHED )
+                eZDebugSetting::writeDebug( "urlalias-migration-checks", "Node exists [node_id={$nodeId}]", __FUNCTION__ );
+                // Check that content object is published
+                $object = $node->attribute( 'object' );
+
+                if ( $object )
                 {
                     $objId = $object->attribute( 'id' );
-                    eZDebugSetting::writeDebug( "urlalias-migration-checks", "Object is published [id={$objId}]", __FUNCTION__ );
-                    $ret = true;
+                    if ( $object->attribute( 'status' ) == EZ_CONTENT_OBJECT_STATUS_PUBLISHED )
+                    {
+                        eZDebugSetting::writeDebug( "urlalias-migration-checks", "Object is published [id={$objId}]", __FUNCTION__ );
+                        $ret = true;
+                    }
+                    else
+                    {
+                        eZDebugSetting::writeDebug( "urlalias-migration-checks", "Object is not published [id={$objId}]", __FUNCTION__ );
+                    }
                 }
-                else
+
+            }
+            else
+            {
+                eZDebugSetting::writeDebug( "urlalias-migration-checks", "Node does not exist [node_id={$nodeId}]", __FUNCTION__ );
+            }
+        }
+        else if ( $this->attribute( 'action_type' ) == 'module' )
+        {
+            $actionPattern = "#^([a-zA-Z0-9_]+):(.+)?$#";
+            if ( preg_match( $actionPattern, $this->attribute( 'action' ), $matches ) )
+            {
+                $actionType = $matches[1];
+                $destination = $matches[2];
+
+                if ( $actionType == 'module' )
                 {
-                    $objId = $object->attribute( 'id' );
-                    eZDebugSetting::writeDebug( "urlalias-migration-checks", "Object is not published [id={$objId}]", __FUNCTION__ );
+                    $moduleUrlPattern = "#^([a-zA-Z0-9]+)/#";
+                    if ( preg_match( $moduleUrlPattern, $destination, $moduleMatches ) )
+                    {
+                        $moduleName = $moduleMatches[1];
+                        $module = eZModule::exists( $moduleName );
+                        $moduleClass = strtolower( get_class( $module ) );
+                        if ( $moduleClass == 'ezmodule' )
+                        {
+                            $ret = true;
+                            $modName = $module->attribute( 'name' );
+                            eZDebugSetting::writeDebug( "urlalias-migration-checks", "Module exists [name={$modName}]", __FUNCTION__ );
+                        }
+                        else
+                        {
+                            eZDebugSetting::writeDebug( "urlalias-migration-checks", "Module does not exist [name={$moduleName}]", __FUNCTION__ );
+                        }
+                    }
                 }
             }
+        }
 
-        }
-        if ( !$ret )
-        {
-            eZDebugSetting::writeDebug( "urlalias-migration-checks", "Node does not exist [node_id={$nodeId}]", __FUNCTION__ );
-        }
         return $ret;
     }
 
@@ -401,7 +437,7 @@ class ezpMigratedUrlAlias extends eZPersistentObject
         $isHistoryEntry = $this->isHistoryEntry();
 
         if ( $this->checkAliasExists()
-             and $this->checkNodeExists()
+             and $this->checkDestinationExists()
              and $this->checkLanguage()
            )
         {
@@ -454,11 +490,31 @@ class ezpMigratedUrlAlias extends eZPersistentObject
     {
         // Set up data for re-integration
         $parentID = 0;
-        $linkID   = 0;
+        $linkID   = true;
         $action = $this->attribute( 'action' );
-        $node = eZContentObjectTreeNode::fetch( eZURLAliasML::nodeIDFromAction( $action ) );
-        $contentObject = $node->object();
-        $alwaysMask = ( $contentObject->attribute( 'language_mask' ) & 1 );
+
+        if ( $this->attribute( 'action_type' ) != 'module' )
+        {
+            $node = eZContentObjectTreeNode::fetch( eZURLAliasML::nodeIDFromAction( $action ) );
+            $contentObject = $node->object();
+            $alwaysMask = ( $contentObject->attribute( 'language_mask' ) & 1 );
+
+            //include_once( 'kernel/classes/ezurlaliasquery.php' );
+            $filter = new eZURLAliasQuery();
+            $filter->actions = array( $action );
+            $filter->type = 'name';
+            $filter->limit = false;
+            $existingElements = $filter->fetchAll();
+
+            if ( count( $existingElements ) > 0 )
+            {
+                $linkID   = (int)$existingElements[0]->attribute( 'id' );
+            }
+        }
+        else
+        {
+            $alwaysMask = (int)$this->attribute( 'always_available' );
+        }
         $aliasText = $this->attribute( 'text' );
         $aliasRedirects = $this->attribute( 'alias_redirects' );
 
@@ -467,18 +523,6 @@ class ezpMigratedUrlAlias extends eZPersistentObject
         $mask = $language->attribute( 'id' );
         $mask |= $alwaysMask;
         $parentID = ( $this->NewRoot == null )? 0 : $this->NewRoot;
-
-        //include_once( 'kernel/classes/ezurlaliasquery.php' );
-        $filter = new eZURLAliasQuery();
-        $filter->actions = array( $action );
-        $filter->type = 'name';
-        $filter->limit = false;
-        $existingElements = $filter->fetchAll();
-
-        if ( count( $existingElements ) > 0 )
-        {
-            $linkID   = (int)$existingElements[0]->attribute( 'id' );
-        }
 
         if ( !$restoreHistoryEntry )
         {
