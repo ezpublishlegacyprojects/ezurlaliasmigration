@@ -8,7 +8,7 @@
 {/case}
 {case match='feedback-migrate-all'}
 <div class="message-feedback">
-<h2><span class="time">[{currentdate()|l10n( shortdatetime )}]</span> {'All url aliases [%migrate_all_count] were successfully migrated.'|i18n( 'design/urlalias/url_migrate',, hash( '%migrate_all_count', $info_data['migrate-all-count'] ) )|wash}</h2>
+<h2><span class="time">[{currentdate()|l10n( shortdatetime )}]</span> {'All url aliases were successfully migrated.'|i18n( 'design/urlalias/url_migrate' )|wash}</h2>
 </div>
 {/case}
 {case}
