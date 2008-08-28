@@ -18,36 +18,36 @@ class ezpUrlAliasMigrateTool
 {
     /**
      * Returns count custom url aliases.
-     * 
+     *
      * Checks for the number for manually entered url aliases in the system
      * ezurlalias_ml table
-     * 
+     *
      * @return string
      */
     public static function customUrlAliasCount()
     {
         $db = eZDB::instance();
-        $sql = 'SELECT count(*) AS count FROM ezurlalias_ml
-                WHERE action_type IN ("eznode", "module") AND is_original = 1 AND is_alias = 1';
+        $sql = "SELECT count(*) AS count FROM ezurlalias_ml
+                WHERE action_type IN ('eznode', 'module') AND is_original = 1 AND is_alias = 1";
         $rows = $db->arrayQuery( $sql );
         return $rows[0]['count'];
     }
 
     /**
      * Returns manually entered url aliases from the system ezurlalias_ml table.
-     * 
+     *
      * Method can be used to fetch many entries, with the <var>$offset</var> and <var>$fetchLimit</var>
      * parameters.
      *
-     * @param string $offset 
-     * @param string $fetchLimit 
+     * @param string $offset
+     * @param string $fetchLimit
      * @return mixed
      */
     public static function customUrlAlias( $offset, $fetchLimit )
     {
         $db = eZDB::instance();
-        $sql = 'SELECT * FROM ezurlalias_ml
-                WHERE action_type IN ("eznode", "module") AND is_original = 1 AND is_alias = 1';
+        $sql = "SELECT * FROM ezurlalias_ml
+                WHERE action_type IN ('eznode', 'module') AND is_original = 1 AND is_alias = 1";
         $rows = $db->arrayQuery( $sql,
                                  array( 'offset' => $offset,
                                         'limit' => $fetchLimit ) );
@@ -62,8 +62,8 @@ class ezpUrlAliasMigrateTool
     public static function historyUrlCount()
     {
         $db = eZDB::instance();
-        $sql = 'SELECT count(*) AS count FROM ezurlalias_ml
-                WHERE action_type != "nop" AND is_original = 0 AND is_alias = 0';
+        $sql = "SELECT count(*) AS count FROM ezurlalias_ml
+                WHERE action_type !='nop' AND is_original = 0 AND is_alias = 0";
         $rows = $db->arrayQuery( $sql );
         return $rows[0]['count'];
     }
@@ -76,8 +76,8 @@ class ezpUrlAliasMigrateTool
     public static function historyUrl( $offset, $fetchLimit )
     {
         $db = eZDB::instance();
-        $sql = 'SELECT * FROM ezurlalias_ml
-                WHERE action_type != "nop" AND is_original = 0 AND is_alias = 0';
+        $sql = "SELECT * FROM ezurlalias_ml
+                WHERE action_type != 'nop' AND is_original = 0 AND is_alias = 0";
         $rows = $db->arrayQuery( $sql,
                                  array( 'offset' => $offset,
                                         'limit' => $fetchLimit ) );
@@ -86,13 +86,13 @@ class ezpUrlAliasMigrateTool
 
     /**
      * Returns migrated url aliases which are stored in the ezurlalias_ml_migrate table.
-     * 
+     *
      * It is possible to use conditions the same as in eZPersistentObject
      * @see eZPersistentObject::fetchObjectList()
      *
-     * @param array $conditions 
-     * @param string $offset 
-     * @param string $limit 
+     * @param array $conditions
+     * @param string $offset
+     * @param string $limit
      * @return mixed
      */
     public static function migratedUrlAlias( $conditions = null, $offset = false, $limit = false )
@@ -125,7 +125,7 @@ class ezpUrlAliasMigrateTool
     /**
      * Calculates the real path, and the action path for migration
      *
-     * @param int $parentId 
+     * @param int $parentId
      * @return void
      */
     public static function extractUrlData( $parentId, $textMD5, $language )
