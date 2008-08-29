@@ -12,7 +12,7 @@ CREATE TABLE ezurlalias_ml_migrate (
     lang_mask integer DEFAULT 0 NOT NULL,
     link integer DEFAULT 0 NOT NULL,
     parent integer DEFAULT 0 NOT NULL,
-    text varchar2(3000) NOT NULL, -- is default ''
+    text varchar2(3000) NOT NULL,
     text_md5 varchar2(32) DEFAULT '' NOT NULL
 );
 
