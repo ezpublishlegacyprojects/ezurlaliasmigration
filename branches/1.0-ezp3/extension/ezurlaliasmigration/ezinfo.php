@@ -8,7 +8,7 @@
  *
  */
 
-class ezurlaliasInfo
+class ezurlaliasmigrationInfo
 {
     function info()
     {
